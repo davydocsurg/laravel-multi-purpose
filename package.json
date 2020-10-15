@@ -30,7 +30,9 @@
         "moment": "^2.29.1",
         "sweetalert2": "^10.3.6",
         "vform": "^1.0.1",
+        "vue-flatpickr-component": "^9.0.2",
         "vue-progressbar": "^0.7.5",
-        "vue-router": "^3.4.6"
+        "vue-router": "^3.4.6",
+        "vue-trix": "^1.1.11"
     }
 }
