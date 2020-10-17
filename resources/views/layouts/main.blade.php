@@ -100,7 +100,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('images/avatar.jpg') }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ Auth::user()->photo }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -192,6 +192,8 @@
       <div class="container-fluid">
 
           <router-view class="py-4 px-4"></router-view>
+
+          <vue-progress-bar></vue-progress-bar>
       </div>
     </div>
   </div>

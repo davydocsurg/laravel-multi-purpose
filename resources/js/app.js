@@ -13,11 +13,37 @@ window.Vue = require("vue");
 // Vue.use(VueRouter);
 
 import router from "./router/index.js";
-
+import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform';
+import VueProgressBar from 'vue-progressbar'
+import Swal from 'sweetalert2'
 
 
+Vue.use(VueProgressBar, {
+  color: '#20c997',
+  failedColor: 'red',
+  height: '3.3px'
+})
 
+const Toast = Swal.mixin({
+  Toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
+
+Vue.filter('date', function(created) {
+  return moment(created).calendar();
+});
+
+Vue.filter('cap', function(text){
+  return text.charAt(0).toUpperCase() + text.slice(1)
+});
+
+
+window.Ignite = new Vue()
+window.Toast = Toast;
+window.Swal = Swal;
 window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
