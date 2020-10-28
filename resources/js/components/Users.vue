@@ -13,10 +13,16 @@
             aria-hidden="true"
           >
             <div class="modal-dialog" role="document">
-              <div class="modal-content bg-dark">
+              <div
+                class="modal-content"
+                :class="editMode ? 'bg-secondary' : 'bg-dark'"
+              >
                 <div class="modal-header">
-                  <h5 class="modal-title" id="usersLabel">
+                  <h5 class="modal-title" id="usersLabel" v-if="!editMode">
                     New User
+                  </h5>
+                  <h5 class="modal-title" id="usersLabel" v-if="editMode">
+                    Update User's Details
                   </h5>
                   <button
                     class="close text-white"
@@ -29,7 +35,7 @@
                     >
                   </button>
                 </div>
-                <form @submit.prevent="createUser()">
+                <form @submit.prevent="editMode ? editUser() : createUser()">
                   <div class="modal-body">
                     <div class="form-group">
                       <input
@@ -97,19 +103,33 @@
                         :class="{
                           'is-invalid': form.errors.has('password'),
                         }"
+                        placeholder="Enter password(min: 8 characters)"
                       />
                       <has-error :form="form" field="password"></has-error>
                     </div>
                   </div>
                   <div class="modal-footer">
                     <button
-                      class="btn btn-secondary btn-sm"
+                      class="btn btn-warning btn-sm"
                       type="button"
                       data-dismiss="modal"
                     >
-                      Close</button
-                    ><button class="btn btn-primary btn-sm" type="submit">
-                      Save changes <i class="fas fa-user-check"></i>
+                      Close
+                    </button>
+                    <button
+                      class="btn btn-success btn-sm"
+                      type="submit"
+                      v-if="!editMode"
+                    >
+                      Add User <i class="fas fa-user-plus"></i>
+                    </button>
+
+                    <button
+                      class="btn btn-info btn-sm"
+                      type="submit"
+                      v-if="editMode"
+                    >
+                      Edit User <i class="fas fa-user-edit"></i>
                     </button>
                   </div>
                 </form>
@@ -121,11 +141,9 @@
               <h3 class="card-title">Users Table</h3>
 
               <div class="card-tools">
-                <button
-                  class="btn btn-success"
-                  data-toggle="modal"
-                  data-target="#users"
-                >
+                <button class="btn btn-success" @click="newUser">
+                  <!-- data-toggle="modal"
+                  data-target="#users" -->
                   <!-- Add New  -->
                   <i class="fas fa-user-plus fa-fw"></i>
                 </button>
@@ -153,7 +171,9 @@
                     <td>{{ user.type | cap }}</td>
                     <td>{{ user.created_at | date }}</td>
                     <td class="white-space-nowrap">
-                      <a href=""><i class="fas fa-user-edit"></i></a>/
+                      <a href="#" @click="editUserModal(user)"
+                        ><i class="fas fa-user-edit"></i></a
+                      >/
                       <a
                         href=""
                         class="text-danger"
@@ -179,6 +199,7 @@ export default {
     return {
       users: {},
       form: new Form({
+        id: "",
         name: "",
         email: "",
         password: "",
@@ -186,6 +207,7 @@ export default {
         bio: "",
         photo: "",
       }),
+      editMode: false,
     };
   },
 
@@ -204,6 +226,20 @@ export default {
       axios.get("api/user").then(({ data }) => (this.users = data.data));
     },
 
+    toasts() {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+    },
+
     createUser() {
       this.$Progress.start();
       this.form
@@ -213,6 +249,7 @@ export default {
 
           $("#users").modal("hide");
 
+          // this.toasts();
           const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -227,12 +264,14 @@ export default {
 
           Toast.fire({
             icon: "success",
-            title: "Signed in successfully",
+            title: "User created successfully",
           });
 
           this.$Progress.finish();
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$Progress.fail();
+        });
     },
 
     deleteUser(id) {
@@ -249,18 +288,65 @@ export default {
       }).then((result) => {
         // Send request to the server
         if (result.value) {
-          Swal.fire("deleted!", "Your file has been deleted", "success");
-          // this.form
-          //   .delete("api/user/" + id)
-          //   .then(() => {
-          //     swal("Deleted!", "User was deleted.", "success");
-          //     Fire.$emit("AfterCreate");
-          //   })
-          //   .catch(() => {
-          //     swal("Failed!", "There was something wronge.", "warning");
-          //   });
+          // Swal.fire("deleted!", "Your file has been deleted", "success");
+          this.form
+            .delete("api/user/" + id)
+            .then(() => {
+              Swal.fire(
+                "Deleted!",
+                "User was deleted successfully!.",
+                "success"
+              );
+              Ignite.$emit("userCreated");
+            })
+            .catch(() => {
+              swal("Failed!", "There was something wrong.", "warning");
+            });
         }
       });
+    },
+    newUser() {
+      this.editMode = false;
+      this.form.reset();
+      $("#users").modal("show");
+    },
+
+    editUserModal(user) {
+      this.editMode = true;
+      this.form.reset();
+      $("#users").modal("show");
+      this.form.fill(user);
+    },
+
+    editUser() {
+      this.$Progress.start();
+      this.form
+        .put("api/user/" + this.form.id)
+        .then(() => {
+          Ignite.$emit("userCreated");
+          $("#users").modal("hide");
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "User's details updated successfully",
+          });
+          this.$Progress.finish();
+        })
+
+        .catch(() => {
+          this.$Progress.fail();
+        });
     },
   },
 };
