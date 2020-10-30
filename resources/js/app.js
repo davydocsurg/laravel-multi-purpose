@@ -13,6 +13,7 @@ window.Vue = require("vue");
 // Vue.use(VueRouter);
 
 import router from "./router/index.js";
+import Gate from "./gate/index.js";
 import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform';
 import VueProgressBar from 'vue-progressbar'
@@ -25,11 +26,18 @@ Vue.use(VueProgressBar, {
   height: '3.3px'
 })
 
+Vue.prototype.$gate = new Gate(window.user)
+
 const Toast = Swal.mixin({
-  Toast: true,
-  position: 'top-end',
+  toast: true,
+  position: "top-end",
   showConfirmButton: false,
-  timer: 3000
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
 });
 
 Vue.filter('date', function(created) {
@@ -76,6 +84,28 @@ Vue.component(
   require("./components/ExampleComponent.vue").default
 );
 
+Vue.component(
+  'passport-clients',
+  require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+  'passport-authorized-clients',
+  require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+  'passport-personal-access-tokens',
+  require('./components/passport/PersonalAccessTokens.vue').default
+);
+
+Vue.component(
+  'notExist',
+  require('./components/notExist.vue').default
+);
+
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -84,5 +114,6 @@ Vue.component(
 
 const app = new Vue({
   router,
+  // gate,
   el: "#app",
 });

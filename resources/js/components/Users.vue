@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="mt-5">
+      <div class="mt-5" v-if="$gate.isAdmin()">
         <div class="col-md-12">
           <!-- Modal-->
           <div
@@ -206,6 +206,7 @@ export default {
         type: "",
         bio: "",
         photo: "",
+        skills: "",
       }),
       editMode: false,
     };
@@ -223,21 +224,23 @@ export default {
 
   methods: {
     displayUsers() {
-      axios.get("api/user").then(({ data }) => (this.users = data.data));
+      if (this.$gate.isAdmin) {
+        axios.get("api/user").then(({ data }) => (this.users = data.data));
+      }
     },
 
     toasts() {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
+      // const Toast = Swal.mixin({
+      //   toast: true,
+      //   position: "top-end",
+      //   showConfirmButton: false,
+      //   timer: 3000,
+      //   timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.addEventListener("mouseenter", Swal.stopTimer);
+      //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+      //   },
+      // });
     },
 
     createUser() {
@@ -250,17 +253,17 @@ export default {
           $("#users").modal("hide");
 
           // this.toasts();
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
+          // const Toast = Swal.mixin({
+          //   toast: true,
+          //   position: "top-end",
+          //   showConfirmButton: false,
+          //   timer: 3000,
+          //   timerProgressBar: true,
+          //   didOpen: (toast) => {
+          //     toast.addEventListener("mouseenter", Swal.stopTimer);
+          //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+          //   },
+          // });
 
           Toast.fire({
             icon: "success",
@@ -280,7 +283,7 @@ export default {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
@@ -300,7 +303,7 @@ export default {
               Ignite.$emit("userCreated");
             })
             .catch(() => {
-              swal("Failed!", "There was something wrong.", "warning");
+              Swal.fire("Failed!", "There was something wrong.", "warning");
             });
         }
       });
@@ -325,17 +328,17 @@ export default {
         .then(() => {
           Ignite.$emit("userCreated");
           $("#users").modal("hide");
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
+          // const Toast = Swal.mixin({
+          //   toast: true,
+          //   position: "top-end",
+          //   showConfirmButton: false,
+          //   timer: 3000,
+          //   timerProgressBar: true,
+          //   didOpen: (toast) => {
+          //     toast.addEventListener("mouseenter", Swal.stopTimer);
+          //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+          //   },
+          // });
 
           Toast.fire({
             icon: "success",
@@ -345,6 +348,11 @@ export default {
         })
 
         .catch(() => {
+          Toast.fire({
+            icon: "failed",
+            title: "Something went wrong",
+          });
+
           this.$Progress.fail();
         });
     },

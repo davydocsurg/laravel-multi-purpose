@@ -4,11 +4,11 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: require("../components/Dashboard.vue").default,
-  },
+  // {
+  //   path: "/dashboard",
+  //   name: "Dashboard",
+  //   component: require("../components/Dashboard.vue").default,
+  // },
 
   {
     path: "/profile",
@@ -20,6 +20,12 @@ const routes = [
     path: "/users",
     name: "Users",
     component: require("../components/Users.vue").default,
+  },
+
+  {
+    path: "/developer",
+    name: "Developer",
+    component: require("../components/Developer.vue").default,
   },
 ];
 

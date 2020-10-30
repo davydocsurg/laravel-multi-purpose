@@ -121,6 +121,7 @@
               </p>
             </router-link>
           </li>
+          @can('isAdmin')
           <li class="nav-item has-treeview menu-closed">
             <a href="#" class="nav-link">
               <i class="nav-icon fab fa-whmcs"></i>
@@ -144,6 +145,8 @@
               </li>
             </ul>
           </li>
+          @endcan
+
           <li class="nav-item">
             <router-link to="/profile" class="nav-link">
               <i class="nav-icon far fa-user"></i>
@@ -152,6 +155,18 @@
               </p>
             </router-link>
           </li>
+
+          @can('isAdmin')
+
+          <li class="nav-item">
+            <router-link to="/developer" class="nav-link">
+              <i class="nav-icon  fas fa-cogs"></i>
+              <p>
+                Developer tools
+              </p>
+            </router-link>
+          </li>
+          @endcan
 
           <li class="nav-item">
             <a href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -214,6 +229,12 @@
 </div>
 <!-- ./wrapper -->
 
+
+@auth
+<script>
+    window.user = @json(auth()->user())
+</script>
+@endauth
 
 <!-- REQUIRED SCRIPTS -->
 <script src="{{ asset('js/app.js') }}"></script>

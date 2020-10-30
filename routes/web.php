@@ -20,6 +20,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/authUser', 'ProfileController@authUserInfo');
+// Route::get('/profileInfo', 'ProfileController@profileInfo');
+Route::put('/updateInfo', 'ProfileController@updateProfile');
 
 // Route::get('/{path}','HomeController@index')->where( 'path', '([A-z\d-/_.]+)?' );
 Route::get('/{path}','HomeController@index')->where( 'path', '([A-z]+)?' );
