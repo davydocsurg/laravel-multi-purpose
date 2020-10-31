@@ -37,9 +37,9 @@
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3">
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control form-control-navbar" v-model="search" type="search" @keyup="filterData" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
+          <button class="btn btn-navbar" @click.prevent="filterData">
             <i class="fas fa-search"></i>
           </button>
         </div>
@@ -113,7 +113,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
-            <li class="nav-item">
+          <li class="nav-item">
             <router-link to="/dashboard" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt "></i>
               <p>
@@ -138,10 +138,10 @@
                 </router-link>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
-                </a>
+                <router-link to="/invoice" class="nav-link">
+                  <i class="fas fa-file-invoice-dollar"></i>
+                  <p>Invoice</p>
+                </router-link>
               </li>
             </ul>
           </li>

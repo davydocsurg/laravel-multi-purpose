@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 // use Auth;
+use Identicon\Identicon;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -28,9 +29,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('isAdmin');
+        // $this->authorize('isAdmin');
+        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
+            return User::latest()->paginate(3);
+        }
 
-        return User::latest()->paginate(5);
     }
 
     /**
@@ -41,6 +44,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // $data =
         $this->validate($request,[
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
@@ -52,7 +56,7 @@ class UserController extends Controller
             'email' => $request['email'],
             'type' => $request['type'],
             'bio' => $request['bio'],
-            'photo' => $request['photo'],
+            'photo' => (new Identicon())->getImageDataUri($request['name'], 256),
             'password' => Hash::make($request['password']),
         ]);
     }
@@ -87,6 +91,7 @@ class UserController extends Controller
 
         $oldPhoto = $user->photo;
         if ($request->photo != $oldPhoto) {
+            // $name = $request->photo;
             $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
 
             \Image::make($request->photo)->save(public_path('images/profile/').$name);
@@ -94,7 +99,7 @@ class UserController extends Controller
 
             $request->merge(['photo' => $name]);
 
-            $userPhoto = public_path('img/profile/').$oldPhoto;
+            $userPhoto = public_path('images/profile/').$oldPhoto;
 
             if (file_exists($userPhoto)) {
                 @unlink($userPhoto);
@@ -147,5 +152,21 @@ class UserController extends Controller
         $user->delete();
 
         return ['message' => 'User deleted successfully'];
+    }
+
+    public function filter()
+    {
+        if ($search = \Request::get('q')) {
+            $users = User::where(function($query) use ($search){
+                $query->where('name', 'LIKE', "%$search%")
+                    ->orWhere('email', 'LIKE', "%$search%")
+                    ->orWhere('type', 'LIKE', "%$search%");
+            })->paginate(3);
+        }
+        else {
+            return User::latest()->paginate(3);
+        }
+
+        return $users;
     }
 }

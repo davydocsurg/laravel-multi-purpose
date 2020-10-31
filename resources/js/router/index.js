@@ -4,11 +4,17 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-  // {
-  //   path: "/dashboard",
-  //   name: "Dashboard",
-  //   component: require("../components/Dashboard.vue").default,
-  // },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: require("../components/Dashboard.vue").default,
+  },
+
+  {
+    path: "*",
+    name: "NotFound",
+    component: require("../components/NotFound.vue").default,
+  },
 
   {
     path: "/profile",
@@ -26,6 +32,12 @@ const routes = [
     path: "/developer",
     name: "Developer",
     component: require("../components/Developer.vue").default,
+  },
+
+  {
+    path: "/invoice",
+    name: "Invoice",
+    component: require("../components/Invoice.vue").default,
   },
 ];
 

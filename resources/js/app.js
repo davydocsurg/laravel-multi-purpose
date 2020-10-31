@@ -14,19 +14,18 @@ window.Vue = require("vue");
 
 import router from "./router/index.js";
 import Gate from "./gate/index.js";
-import moment from 'moment';
-import { Form, HasError, AlertError } from 'vform';
-import VueProgressBar from 'vue-progressbar'
-import Swal from 'sweetalert2'
-
+import moment from "moment";
+import { Form, HasError, AlertError } from "vform";
+import VueProgressBar from "vue-progressbar";
+import Swal from "sweetalert2";
 
 Vue.use(VueProgressBar, {
-  color: '#20c997',
-  failedColor: 'red',
-  height: '3.3px'
-})
+  color: "#20c997",
+  failedColor: "red",
+  height: "3.3px",
+});
 
-Vue.prototype.$gate = new Gate(window.user)
+Vue.prototype.$gate = new Gate(window.user);
 
 const Toast = Swal.mixin({
   toast: true,
@@ -40,27 +39,20 @@ const Toast = Swal.mixin({
   },
 });
 
-Vue.filter('date', function(created) {
+Vue.filter("date", function (created) {
   return moment(created).calendar();
 });
 
-Vue.filter('cap', function(text){
-  return text.charAt(0).toUpperCase() + text.slice(1)
+Vue.filter("cap", function (text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 });
 
-
-window.Ignite = new Vue()
+window.Ignite = new Vue();
 window.Toast = Toast;
 window.Swal = Swal;
 window.Form = Form;
-Vue.component(HasError.name, HasError)
-Vue.component(AlertError.name, AlertError)
-
-// routes
-// let routes = [
-//   { path: '/dashboard', component: require("./components/Dashboard.vue").default },
-//   { path: '/profile', component: require("./components/Profile.vue").default }
-// ]
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
 
 // const router = new VueRouter({
 // mode: 'history',
@@ -85,26 +77,25 @@ Vue.component(
 );
 
 Vue.component(
-  'passport-clients',
-  require('./components/passport/Clients.vue').default
+  "passport-clients",
+  require("./components/passport/Clients.vue").default
 );
 
 Vue.component(
-  'passport-authorized-clients',
-  require('./components/passport/AuthorizedClients.vue').default
+  "passport-authorized-clients",
+  require("./components/passport/AuthorizedClients.vue").default
 );
 
 Vue.component(
-  'passport-personal-access-tokens',
-  require('./components/passport/PersonalAccessTokens.vue').default
+  "passport-personal-access-tokens",
+  require("./components/passport/PersonalAccessTokens.vue").default
 );
 
-Vue.component(
-  'notExist',
-  require('./components/notExist.vue').default
-);
+Vue.component("not-found", require("./components/NotFound.vue").default);
 
+Vue.component("invoice", require("./components/Invoice.vue").default);
 
+Vue.component("pagination", require("laravel-vue-pagination"));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -116,4 +107,17 @@ const app = new Vue({
   router,
   // gate,
   el: "#app",
+  data: {
+    search: "",
+  },
+
+  methods: {
+    filterData: _.debounce(() => {
+      Ignite.$emit("searching");
+    }, 800),
+
+    printInvoice() {
+      window.print();
+    },
+  },
 });

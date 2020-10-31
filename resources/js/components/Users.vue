@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="mt-5" v-if="$gate.isAdmin()">
+      <div class="mt-5" v-if="$gate.isAdminOrAuthor()">
         <div class="col-md-12">
           <!-- Modal-->
           <div
@@ -157,6 +157,7 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <!-- <th scope="col" v-if="user.photo">Photo</th> -->
                     <th scope="col">Email</th>
                     <th scope="col">Type</th>
                     <th scope="col">Registered At</th>
@@ -164,9 +165,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="user in users" :key="user.id">
+                  <tr v-for="user in users.data" :key="user.id">
                     <th scope="row">{{ user.id }}</th>
                     <td>{{ user.name }}</td>
+                    <!-- <td><img class="img-circle" :src="authUser.photo" alt="User Avatar" /></td> -->
                     <td>{{ user.email }}</td>
                     <td>{{ user.type | cap }}</td>
                     <td>{{ user.created_at | date }}</td>
@@ -185,9 +187,18 @@
                 </tbody>
               </table>
               <!-- </div> -->
+              <div class="card-footer">
+                <pagination
+                  :data="users"
+                  @pagination-change-page="getResults"
+                ></pagination>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="container" v-if="!$gate.isAdminOrAuthor()">
+        <not-found></not-found>
       </div>
     </div>
   </div>
@@ -220,27 +231,32 @@ export default {
     Ignite.$on("userCreated", () => {
       this.displayUsers();
     });
+
+    Ignite.$on("searching", () => {
+      let query = this.$parent.search;
+      axios
+        .get("api/findUser?q=" + query)
+        .then((data) => {
+          this.users = data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   },
 
   methods: {
     displayUsers() {
-      if (this.$gate.isAdmin) {
-        axios.get("api/user").then(({ data }) => (this.users = data.data));
+      if (this.$gate.isAdminOrAuthor) {
+        axios.get("api/user").then(({ data }) => (this.users = data));
       }
     },
 
-    toasts() {
-      // const Toast = Swal.mixin({
-      //   toast: true,
-      //   position: "top-end",
-      //   showConfirmButton: false,
-      //   timer: 3000,
-      //   timerProgressBar: true,
-      //   didOpen: (toast) => {
-      //     toast.addEventListener("mouseenter", Swal.stopTimer);
-      //     toast.addEventListener("mouseleave", Swal.resumeTimer);
-      //   },
-      // });
+    getResults(page = 1) {
+      const paginationURL = "api/user?page=";
+      axios.get(paginationURL + page).then((response) => {
+        this.users = response.data;
+      });
     },
 
     createUser() {
@@ -251,19 +267,6 @@ export default {
           Ignite.$emit("userCreated");
 
           $("#users").modal("hide");
-
-          // this.toasts();
-          // const Toast = Swal.mixin({
-          //   toast: true,
-          //   position: "top-end",
-          //   showConfirmButton: false,
-          //   timer: 3000,
-          //   timerProgressBar: true,
-          //   didOpen: (toast) => {
-          //     toast.addEventListener("mouseenter", Swal.stopTimer);
-          //     toast.addEventListener("mouseleave", Swal.resumeTimer);
-          //   },
-          // });
 
           Toast.fire({
             icon: "success",
@@ -278,8 +281,6 @@ export default {
     },
 
     deleteUser(id) {
-      // Swal.fire("hello world");
-
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",

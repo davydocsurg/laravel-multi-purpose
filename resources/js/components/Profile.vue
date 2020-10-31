@@ -5,7 +5,7 @@
   height: 250px !important;
 }
 .widget-user-image {
-  margin-top: 7.6rem;
+  margin-top: 6rem;
 }
 </style>
 
@@ -77,7 +77,7 @@
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link  text-white"
+                  class="nav-link text-white"
                   href="#settings"
                   data-toggle="tab"
                   @click="popForm(authUser)"
@@ -443,7 +443,6 @@
                         class="form-control"
                         id="inputExperience"
                         placeholder="Experience"
-
                       ></textarea>
                     </div>
                   </div>
@@ -460,7 +459,7 @@
                         placeholder="Skills"
                         name="skills"
                         v-model="form.skills"
-                      >
+                      />
                     </div>
                   </div>
 
@@ -557,7 +556,7 @@ export default {
       this.form.fill(authUser);
     },
 
-      displayAuthUser() {
+    displayAuthUser() {
       const url = window.location.origin + "/api/profile";
       // const url = window.location.origin + "/authUser";
       axios
@@ -573,20 +572,31 @@ export default {
       // console.log('file');
       let file = e.target.files[0];
       let reader = new FileReader();
-      if (file["size"] < 2111775) {
-        reader.onloadend = (file) => {
-          // console.log("RESULT", reader.result);
-          this.form.photo = reader.result;
-        };
-        reader.readAsDataURL(file);
-      } else {
+
+      let limit = 1024 * 1024 * 2;
+      if (file["size"] > limit) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "File size breached!",
+          text: "File size exceeded!",
         });
+
+        return false;
       }
+
+      reader.onloadend = (file) => {
+        this.form.photo = reader.result;
+      };
+      reader.readAsDataURL(file);
     },
+
+    // getProfilePhoto() {
+    //   let photo =
+    //     this.form.photo.length > 200
+    //       ? this.form.photo
+    //       : "images/profile/" + this.form.photo;
+    //   return photo;
+    // },
 
     updateProfileInfo() {
       // const url = window.location.origin + "/updateInfo";
@@ -596,11 +606,11 @@ export default {
         .put(url)
         .then(() => {
           this.$Progress.finish();
-           Toast.fire({
+          Toast.fire({
             icon: "success",
             title: "Profile updated successfully",
           });
-          this.displayAuthUser()
+          this.displayAuthUser();
           // this.form.reset();
         })
 

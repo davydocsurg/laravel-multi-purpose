@@ -27,4 +27,5 @@ Route::group([
     Route::apiResources(['user' => 'API\UserController']);
     Route::get('/profile', 'API\UserController@profileInfo');
     Route::put('/profile', 'API\UserController@updateProfile');
+    Route::get('/findUser', 'API\UserController@filter');
 });

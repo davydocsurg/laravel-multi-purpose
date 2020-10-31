@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/yyy',function(){
+    return view('invoice');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -26,3 +30,5 @@ Route::put('/updateInfo', 'ProfileController@updateProfile');
 
 // Route::get('/{path}','HomeController@index')->where( 'path', '([A-z\d-/_.]+)?' );
 Route::get('/{path}','HomeController@index')->where( 'path', '([A-z]+)?' );
+
+
