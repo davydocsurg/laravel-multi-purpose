@@ -70,7 +70,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'photo'   => (new Identicon())->getImageDataUri($data['name'], 256),
+            // 'photo'   => (new Identicon())->getImageDataUri($data['name'], 256),
+            'photo'   => $data['photo']
         ]);
     }
 
