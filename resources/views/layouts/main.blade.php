@@ -17,6 +17,26 @@
 </head>
 
 <body class="hold-transition sidebar-mini">
+
+  <style>
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: opacity .8s;
+}
+
+.fade-leave {
+}
+
+.fade-leave-active {
+  transition: opacity .7s;
+  opacity: 0;
+}
+  </style>
+
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -100,10 +120,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ Auth::user()->photo }}" class="img-circle elevation-2" alt="User Image">
+          {{-- <img src="{{ asset('images/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image"> --}}
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+          {{-- <a href="#" class="d-block">{{ Auth::user()->name }}</a> --}}
         </div>
       </div>
 
@@ -148,7 +168,7 @@
           @endcan
 
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link">
+            <router-link to="/profile" class="nav-link" @click.prevent="popForm(authUser)">
               <i class="nav-icon far fa-user"></i>
               <p>
                 Profile
@@ -206,7 +226,9 @@
     <div class="content">
       <div class="container-fluid">
 
-          <router-view class="py-4 px-4"></router-view>
+          <transition name="fade" mode="out-in">
+            <router-view class="py-4 px-4"></router-view>
+          </transition>
 
           <vue-progress-bar></vue-progress-bar>
       </div>

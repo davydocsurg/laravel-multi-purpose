@@ -1,4 +1,4 @@
-<style lang="css">
+<style lang="css" scoped>
 .fs-error {
     font-size: 10rem;
 }

@@ -106,6 +106,22 @@ class UserController extends Controller
             }
         }
 
+        // $oldCoverPhoto = $user->cover_photo;
+        // if ($request->cover_photo != $oldPhoto) {
+        //     $name = time().'.' . explode('/', explode(':', substr($request->cover_photo, 0, strpos($request->cover_photo, ';')))[1])[1];
+
+        //     \Image::make($request->cover_photo)->save(public_path('images/cover/').$name);
+        //         $request->merge(['photo' => $name]);
+
+        //     $request->merge(['photo' => $name]);
+
+        //     $userCoverPhoto = public_path('images/cover/').$oldCoverPhoto;
+
+        //     if (file_exists($userCoverPhoto)) {
+        //         @unlink($userCoverPhoto);
+        //     }
+        // }
+
         if (!empty($request->password)) {
             $request->merge(['password' => Hash::make($request['password'])]);
         }
@@ -164,7 +180,7 @@ class UserController extends Controller
             })->paginate(3);
         }
         else {
-            return User::latest()->paginate(3);
+            return User::latest()->simplePaginate(3);
         }
 
         return $users;

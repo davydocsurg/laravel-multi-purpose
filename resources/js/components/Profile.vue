@@ -19,11 +19,13 @@
             class="widget-user-header text-white"
             style="background: url('./images/photo1.png');"
           >
+            <!-- style="background: url('images/cover/'+authUser.cover_photo);" -->
+
             <h3 class="widget-user-username text-right">{{ authUser.name }}</h3>
             <h5 class="widget-user-desc text-right">{{ authUser.skills }}</h5>
           </div>
           <div class="widget-user-image">
-            <img class="img-circle" :src="authUser.photo" alt="User Avatar" />
+            <img class="img-circle" :src="'images/profile/' + authUser.photo | getProfilePhoto() " alt="User Avatar" />
           </div>
           <div class="card-footer">
             <div class="row">
@@ -477,6 +479,21 @@
                       />
                     </div>
                   </div>
+
+                  <!-- <div class="form-group row">
+                    <label for="coverPhoto" class="col-sm-2 col-form-label"
+                      >Cover Photo</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="file"
+                        class="form-control"
+                        name="cover_photo"
+                        placeholder=""
+                        @change="uploadCoverImg"
+                      />
+                    </div>
+                  </div> -->
                   <div class="form-group row">
                     <label for="inputPassword" class="col-sm-2 col-form-label"
                       >Password</label
@@ -541,6 +558,7 @@ export default {
         type: "",
         bio: "",
         photo: "",
+        // cover_photo: "",
         skills: "",
       }),
     };
@@ -548,6 +566,7 @@ export default {
 
   mounted() {
     this.displayAuthUser();
+    // this.getProfilePhoto();
     // this.popForm();
   },
 
@@ -590,12 +609,41 @@ export default {
       reader.readAsDataURL(file);
     },
 
-    // getProfilePhoto() {
-    //   let photo =
-    //     this.form.photo.length > 200
-    //       ? this.form.photo
-    //       : "images/profile/" + this.form.photo;
-    //   return photo;
+    // uploadCoverImg(e) {
+    //   let file = e.target.files[0];
+    //   let reader = new FileReader();
+
+    //   let limit = 1024 * 1024 * 2;
+    //   if (file["size"] > limit) {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Oops...",
+    //       text: "File size exceeded!",
+    //     });
+
+    //     return false;
+    //   }
+
+    //   reader.onloadend = (file) => {
+    //     this.form.cover_photo = reader.result;
+    //   };
+    //   reader.readAsDataURL(file);
+    // },
+
+    getProfilePhoto() {
+      let photo =
+        this.form.photo.length > 200
+          ? this.form.photo
+          : "images/profile/" + this.form.photo;
+      return photo;
+    },
+
+    //   getCoverPhoto() {
+    //   let cover_photo =
+    //     this.form.cover_photo.length > 200
+    //       ? this.cover_photo.photo
+    //       : "images/profile/" + this.cover_photo.photo;
+    //   return cover_photo;
     // },
 
     updateProfileInfo() {
