@@ -56,7 +56,7 @@ class UserController extends Controller
             'email' => $request['email'],
             'type' => $request['type'],
             'bio' => $request['bio'],
-            'photo' => (new Identicon())->getImageDataUri($request['name'], 256),
+            // 'photo' => (new Identicon())->getImageDataUri($request['name'], 256),
             'password' => Hash::make($request['password']),
         ]);
     }

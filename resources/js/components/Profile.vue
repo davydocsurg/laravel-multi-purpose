@@ -21,12 +21,27 @@
           >
             <!-- style="background: url('images/cover/'+authUser.cover_photo);" -->
 
-            <h3 class="widget-user-username text-right">{{ authUser.name }}</h3>
+            <transition
+              appear=""
+              enter-active-class="animated hinge"
+              leave-active-class="animated lightSpeedOutRight"
+            >
+              <h3 class="widget-user-username text-right">
+                {{ authUser.name }}
+              </h3>
+            </transition>
             <h5 class="widget-user-desc text-right">{{ authUser.skills }}</h5>
           </div>
           <div class="widget-user-image">
-            <img class="img-circle" :src="'images/profile/' + authUser.photo | getProfilePhoto() " alt="User Avatar" />
+            <img
+              class="img-circle"
+              :src="('images/profile/' + authUser.photo) | getProfilePhoto()"
+              alt="User Avatar"
+            />
+              <!-- v-if="authUser.photo" -->
+            <!-- <img class="img-circle" src="default.png" alt="User Avatar" /> -->
           </div>
+
           <div class="card-footer">
             <div class="row">
               <div class="col-sm-4 border-right">

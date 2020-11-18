@@ -35,6 +35,52 @@
   transition: opacity .7s;
   opacity: 0;
 }
+
+
+//
+.slide-enter {
+  opacity: 0;
+}
+
+.slide-enter-active {
+  animation: slide-in 1.3s ease-out forwards;
+  transition: opacity 1s;
+}
+
+.slide-leave {
+}
+
+.slide-leave-active {
+  animation: slide-out 1s ease-out forwards;
+  transition: opacity 1s;
+  opacity: 0;
+  position: absolute;
+}
+
+.slide-move {
+  transition: transform 1s;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(20rem);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  to {
+    transform: translateY(20px);
+  }
+
+  from {
+    transform: translateY(0);
+  }
+}
+
   </style>
 
 <div class="wrapper" id="app">
@@ -108,7 +154,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="/home" class="brand-link">
       {{-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
       style="opacity: .8"> --}}
       <i class="fas fa-laptop-code brand-image img-circle elevation-3"></i>
@@ -226,7 +272,7 @@
     <div class="content">
       <div class="container-fluid">
 
-          <transition name="fade" mode="out-in">
+          <transition name="slide" mode="out-in">
             <router-view class="py-4 px-4"></router-view>
           </transition>
 

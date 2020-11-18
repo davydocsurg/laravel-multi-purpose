@@ -29,3 +29,4 @@ Route::group([
     Route::put('/profile', 'API\UserController@updateProfile');
     Route::get('/findUser', 'API\UserController@filter');
 });
+

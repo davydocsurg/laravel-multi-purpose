@@ -18,6 +18,9 @@ import moment from "moment";
 import { Form, HasError, AlertError } from "vform";
 import VueProgressBar from "vue-progressbar";
 import Swal from "sweetalert2";
+import 'animate.css';
+// import {store} from './store/index'
+
 
 Vue.use(VueProgressBar, {
   color: "#20c997",
@@ -105,6 +108,7 @@ Vue.component("pagination", require("laravel-vue-pagination"));
 
 const app = new Vue({
   router,
+  // store,
   // gate,
   el: "#app",
   data: {
