@@ -21,6 +21,10 @@ Route::get('/yyy',function(){
     return view('invoice');
 });
 
+Route::get('/slides',function(){
+    return view('slides');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

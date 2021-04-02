@@ -8353,7 +8353,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.fs-error[data-v-2ce50e5a] {\n    font-size: 10rem;\n}\n.fs-error[data-v-2ce50e5a] {\n    font-size: 10rem !important;\n}\n.text-300[data-v-2ce50e5a] {\n    color:\n    #d8e2ef !important;\n}\n.display-1[data-v-2ce50e5a] {\n    font-size: 4.29982rem;\n    font-weight: 900;\n    line-height: 1;\n}\n", ""]);
+exports.push([module.i, "\n.fs-error[data-v-2ce50e5a] {\n    font-size: 10rem;\n}\n.fs-error[data-v-2ce50e5a] {\n    font-size: 10rem !important;\n}\n.text-300[data-v-2ce50e5a] {\n    color: #d8e2ef !important;\n}\n.display-1[data-v-2ce50e5a] {\n    font-size: 4.29982rem;\n    font-weight: 900;\n    line-height: 1;\n}\n", ""]);
 
 // exports
 
@@ -67411,7 +67411,7 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n            The page you're looking for is not found.\n          "
+                    "\n                        The page you're looking for is not found.\n                    "
                   )
                 ]
               ),
@@ -67424,11 +67424,11 @@ var render = function() {
                 "router-link",
                 {
                   staticClass: "btn btn-primary btn-sm mt-3",
-                  attrs: { to: "/home" }
+                  attrs: { to: "/dashboard" }
                 },
                 [
                   _c("i", { staticClass: "fas fa-home" }),
-                  _vm._v("Take me home")
+                  _vm._v("Take\n                        me home")
                 ]
               )
             ],
@@ -67446,12 +67446,12 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("p", [
       _vm._v(
-        "\n            Make sure the address is correct and that the page hasn't moved.\n            If you think this is a mistake,\n            "
+        "\n                        Make sure the address is correct and that the page\n                        hasn't moved. If you think this is a mistake,\n                        "
       ),
       _c("a", { attrs: { href: "mailto:info@exmaple.com" } }, [
         _vm._v("contact us")
       ]),
-      _vm._v(".\n          ")
+      _vm._v(".\n                    ")
     ])
   }
 ]
@@ -68323,7 +68323,7 @@ var render = function() {
     _c("div", { staticClass: "container" }, [
       _vm.$gate.isAdminOrAuthor()
         ? _c("div", { staticClass: "mt-5" }, [
-            _c("div", { staticClass: "col-md-12" }, [
+            _c("div", { staticClass: "col-md-12 col-xs-12" }, [
               _c(
                 "div",
                 {

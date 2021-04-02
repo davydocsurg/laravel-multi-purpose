@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="mt-5" v-if="$gate.isAdminOrAuthor()">
-        <div class="col-md-12">
+        <div class="col-md-12 col-xs-12">
           <!-- Modal-->
           <div
             class="modal fade"

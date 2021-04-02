@@ -272,7 +272,7 @@
     <div class="content">
       <div class="container-fluid">
 
-          <transition name="slide" mode="out-in">
+          <transition name="fade" mode="out-in">
             <router-view class="py-4 px-4"></router-view>
           </transition>
 
